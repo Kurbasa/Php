@@ -37,11 +37,11 @@ class DiggingDeeperController extends Controller
          */
         $collection = collect($eloquentCollection->toArray());
 
-        /* dd(
-             get_class($eloquentCollection),
-             get_class($collection),
-             $collection
-         );*/
+        dd(
+            get_class($eloquentCollection),
+            get_class($collection),
+            $collection
+        );
 
 
         $result['first'] = $collection->first(); //вибираємо 1 елемент
@@ -77,7 +77,7 @@ class DiggingDeeperController extends Controller
 
         $result['map']['not_exists'] = $result['map']['all']->where('exists', '=', false)->values()->keyBy('item_id');  //витягаємо видалені елементи
 
-        //dd ($result);
+        dd ($result);
 
         //Базова змінна змінюється (трансформується).
         $collection->transform(function ($item) {
@@ -90,7 +90,7 @@ class DiggingDeeperController extends Controller
             return $newItem;
         });
 
-        //dd ($collection);
+        dd ($collection);
 
         $newItem = new \stdClass;
         $newItem->id = 9999;
@@ -98,14 +98,14 @@ class DiggingDeeperController extends Controller
         $newItem2 = new \stdClass;
         $newItem2->id = 8888;
 
-        //dd ($newItem, $newItem2);
+        dd ($newItem, $newItem2);
 
         //Додаємо елемент в початок/кінець колекції
-        // $newItemFirst = $collection->prepend($newItem)->first(); //додали в початок
-        // $newItemLast = $collection->push($newItem2)->last(); //додали в кінець
-        // $pulledItem = $collection->pull(1); //забрали з першим ключем
+        $newItemFirst = $collection->prepend($newItem)->first(); //додали в початок
+        $newItemLast = $collection->push($newItem2)->last(); //додали в кінець
+        $pulledItem = $collection->pull(1); //забрали з першим ключем
 
-        //dd(compact('collection', 'newItemFirst' , 'newItemLast', 'pulledItem'));
+        dd(compact('collection', 'newItemFirst' , 'newItemLast', 'pulledItem'));
 
         //Фільтрація
         $filtered = $collection->filter(function ($item) {
@@ -118,15 +118,17 @@ class DiggingDeeperController extends Controller
             return $result;
         });
 
-        //dd(compact('filtered')); //закоментувати 91-106 рядки перед перевіркою
+        dd(compact('filtered')); //закоментувати 91-106 рядки перед перевіркою
 
         $sortedSimpleCollection = collect([5, 3, 1, 2, 4])->sort()->values();
         $sortedAscCollection = $collection->sortBy('created_at');
         $sortedDescCollection = $collection->sortByDesc('item_id');
 
-        //dd(compact('sortedSimpleCollection', 'sortedAscCollection', 'sortedDescCollection'));
+        dd(compact('sortedSimpleCollection', 'sortedAscCollection', 'sortedDescCollection'));
+
 
     }
+
     public function processVideo()
     {
         ProcessVideoJob::dispatch();
